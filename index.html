@@ -3,1028 +3,832 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stunify - Student Sharing Platform</title>
+    <title>Admin Login — Stunify</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
         :root {
-            --primary-pink: #FF6786;
-            --black: #0A0A0A;
-            --off-black: #1A1A1A;
-            --light-gray: #F5F5F5;
-            --white: #FFFFFF;
+            --pink:       #FF6786;
+            --pink-deep:  #e8496d;
+            --pink-glow:  rgba(255, 103, 134, 0.35);
+            --pink-soft:  rgba(255, 103, 134, 0.08);
+            --black:      #080808;
+            --surface:    #111111;
+            --surface-2:  #181818;
+            --border:     rgba(255,255,255,0.07);
+            --border-lit: rgba(255, 103, 134, 0.4);
+            --text:       #f0f0f0;
+            --muted:      #666;
+            --muted-2:    #888;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--black);
-            color: var(--white);
-            overflow-x: hidden;
-        }
-
-        .bg-pattern {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+        html, body {
             height: 100%;
-            z-index: -1;
-            opacity: 0.03;
-            background-image: 
-                repeating-linear-gradient(45deg, transparent, transparent 35px, var(--primary-pink) 35px, var(--primary-pink) 36px),
-                repeating-linear-gradient(-45deg, transparent, transparent 35px, var(--primary-pink) 35px, var(--primary-pink) 36px);
-            animation: slidePattern 20s linear infinite;
-        }
-
-        @keyframes slidePattern {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1.5rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            background: rgba(10, 10, 10, 0.8);
-            border-bottom: 1px solid rgba(255, 103, 134, 0.1);
-        }
-
-        .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem;
-            letter-spacing: 2px;
-            color: var(--primary-pink);
-            text-shadow: 0 0 20px rgba(255, 103, 134, 0.5);
-        }
-
-        nav {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        nav a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-pink);
-            transition: width 0.3s ease;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        .cta-button {
-            background: var(--primary-pink);
-            color: var(--white);
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            border: 2px solid var(--primary-pink);
-        }
-
-        .cta-button:hover {
-            background: transparent;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 103, 134, 0.3);
-        }
-
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8rem 5% 4rem;
-            position: relative;
-        }
-
-        .hero-content {
-            max-width: 1400px;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .hero-text h1 {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero-text h1 span {
-            color: var(--primary-pink);
-            display: block;
-        }
-
-        .hero-text p {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease 0.2s backwards;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1.5rem;
-            animation: fadeInUp 1s ease 0.4s backwards;
-        }
-
-        .btn-primary {
-            background: var(--primary-pink);
-            color: var(--white);
-            padding: 1.2rem 3rem;
-            border-radius: 50px;
-            font-weight: 700;
-            text-decoration: none;
-            border: 2px solid var(--primary-pink);
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        .btn-primary:hover {
-            background: transparent;
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255, 103, 134, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            padding: 1.2rem 3rem;
-            border-radius: 50px;
-            font-weight: 700;
-            text-decoration: none;
-            border: 2px solid var(--white);
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        .btn-secondary:hover {
-            background: var(--white);
-            color: var(--black);
-            transform: translateY(-3px);
-        }
-
-        .hero-visual {
-            position: relative;
-            animation: fadeIn 1.5s ease 0.6s backwards;
-        }
-
-        .floating-card {
-            background: var(--off-black);
-            border: 2px solid var(--primary-pink);
-            border-radius: 20px;
-            padding: 2rem;
-            position: relative;
-            box-shadow: 0 20px 60px rgba(255, 103, 134, 0.2);
-        }
-
-        .floating-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, var(--primary-pink), transparent, var(--primary-pink));
-            border-radius: 20px;
-            z-index: -1;
-            opacity: 0.5;
-            filter: blur(10px);
-        }
-
-        .stat-item {
-            margin-bottom: 1.5rem;
-        }
-
-        .stat-number {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3rem;
-            color: var(--primary-pink);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 0.95rem;
-            opacity: 0.8;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .founders {
-            padding: 6rem 5%;
-            background: var(--off-black);
-            position: relative;
-        }
-
-        .founders::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary-pink), transparent);
-        }
-
-        .section-title {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 1rem;
-            color: var(--primary-pink);
-        }
-
-        .section-subtitle {
-            text-align: center;
-            font-size: 1.1rem;
-            opacity: 0.8;
-            margin-bottom: 4rem;
-        }
-
-        .founders-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .founder-card {
             background: var(--black);
-            border: 1px solid rgba(255, 103, 134, 0.2);
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
             overflow: hidden;
         }
 
-        .founder-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 103, 134, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .founder-card:hover::before {
-            left: 100%;
-        }
-
-        .founder-card:hover {
-            border-color: var(--primary-pink);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(255, 103, 134, 0.3);
-        }
-
-        .founder-initial {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--primary-pink);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            margin: 0 auto 1rem;
-            color: var(--white);
-        }
-
-        .founder-name {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .founder-role {
-            font-size: 0.9rem;
-            opacity: 0.7;
-            color: var(--primary-pink);
-        }
-
-        .features {
-            padding: 6rem 5%;
+        /* ── ANIMATED BACKGROUND ────────────────────────────── */
+        .bg {
+            position: fixed; inset: 0; z-index: 0;
             background: var(--black);
+            overflow: hidden;
         }
 
-        .features-grid {
-            max-width: 1200px;
-            margin: 0 auto;
+        /* large ambient orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0;
+            animation: orbFloat 12s ease-in-out infinite;
+        }
+        .orb-1 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255,103,134,0.22) 0%, transparent 70%);
+            top: -200px; left: -150px;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(255,103,134,0.15) 0%, transparent 70%);
+            bottom: -100px; right: -100px;
+            animation-delay: -6s;
+        }
+        .orb-3 {
+            width: 250px; height: 250px;
+            background: radial-gradient(circle, rgba(255,150,170,0.12) 0%, transparent 70%);
+            top: 40%; left: 60%;
+            animation-delay: -3s;
+        }
+
+        @keyframes orbFloat {
+            0%   { opacity: 0; transform: translate(0,0) scale(1); }
+            20%  { opacity: 1; }
+            50%  { transform: translate(30px, -20px) scale(1.05); }
+            80%  { opacity: 1; }
+            100% { opacity: 0; transform: translate(0,0) scale(1); }
+        }
+
+        /* fine grid */
+        .grid-bg {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,103,134,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,103,134,0.04) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+        }
+
+        /* scanning line */
+        .scan-line {
+            position: absolute; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--pink), transparent);
+            opacity: 0.3;
+            animation: scan 8s linear infinite;
+        }
+        @keyframes scan {
+            0%   { top: -2px; }
+            100% { top: 100%; }
+        }
+
+        /* ── LAYOUT ─────────────────────────────────────────── */
+        .page {
+            position: relative; z-index: 1;
+            min-height: 100vh;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            margin-top: 4rem;
+            grid-template-columns: 1fr 480px 1fr;
+            grid-template-rows: 1fr;
+            align-items: center;
+            padding: 2rem;
         }
 
-        .feature-card {
-            padding: 2.5rem;
-            border-radius: 15px;
-            background: var(--off-black);
-            border: 1px solid rgba(255, 103, 134, 0.1);
-            transition: all 0.3s ease;
+        /* ── LEFT PANEL (brand) ──────────────────────────────── */
+        .brand-panel {
+            grid-column: 1;
+            padding: 3rem;
+            opacity: 0;
+            animation: slideRight 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
         }
 
-        .feature-card:hover {
-            border-color: var(--primary-pink);
-            transform: translateY(-5px);
+        @keyframes slideRight {
+            from { opacity: 0; transform: translateX(-40px); }
+            to   { opacity: 1; transform: translateX(0); }
         }
 
-        .feature-icon {
-            font-size: 3rem;
+        .brand-wordmark {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(4rem, 8vw, 7rem);
+            line-height: 0.9;
+            letter-spacing: 3px;
+            color: var(--text);
             margin-bottom: 1.5rem;
         }
-
-        .feature-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
+        .brand-wordmark span {
+            color: var(--pink);
+            display: block;
         }
 
-        .feature-description {
-            opacity: 0.8;
-            line-height: 1.7;
-        }
-
-        .how-it-works {
-            padding: 6rem 5%;
-            background: var(--off-black);
-        }
-
-        .steps {
-            max-width: 1000px;
-            margin: 4rem auto 0;
-            display: grid;
-            gap: 3rem;
-        }
-
-        .step {
-            display: grid;
-            grid-template-columns: 80px 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-
-        .step-number {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--primary-pink);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem;
-            color: var(--white);
-            position: relative;
-        }
-
-        .step-number::after {
-            content: '';
-            position: absolute;
-            bottom: -3rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 3rem;
-            background: rgba(255, 103, 134, 0.3);
-        }
-
-        .step:last-child .step-number::after {
-            display: none;
-        }
-
-        .step-content h3 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .step-content p {
-            opacity: 0.8;
-            line-height: 1.7;
-        }
-
-        .privacy {
-            padding: 6rem 5%;
-            background: var(--black);
-        }
-
-        .privacy-content {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .privacy-highlight {
-            background: var(--off-black);
-            border-left: 4px solid var(--primary-pink);
-            padding: 2rem;
-            margin: 2rem 0;
-            border-radius: 0 10px 10px 0;
-        }
-
-        .privacy-highlight h3 {
-            font-family: 'Syne', sans-serif;
-            color: var(--primary-pink);
-            margin-bottom: 1rem;
-        }
-
-        .privacy-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .privacy-item {
-            padding: 1.5rem;
-            background: var(--off-black);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 103, 134, 0.1);
-        }
-
-        .privacy-item h4 {
-            color: var(--primary-pink);
-            margin-bottom: 0.8rem;
-            font-weight: 700;
-        }
-
-        .privacy-item p {
-            opacity: 0.8;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        footer {
-            padding: 4rem 5% 2rem;
-            background: var(--off-black);
-            border-top: 1px solid rgba(255, 103, 134, 0.1);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
+        .brand-tagline {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--muted-2);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
             margin-bottom: 3rem;
         }
 
-        .footer-section h3 {
-            font-family: 'Syne', sans-serif;
-            color: var(--primary-pink);
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-section ul li a {
-            color: var(--white);
-            text-decoration: none;
-            opacity: 0.8;
-            transition: all 0.3s ease;
-        }
-
-        .footer-section ul li a:hover {
-            opacity: 1;
-            color: var(--primary-pink);
-            padding-left: 5px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 103, 134, 0.1);
-            opacity: 0.7;
-        }
-
-        .mobile-menu-toggle {
-            display: none;
+        .brand-stats {
+            display: flex;
             flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
+            gap: 1.2rem;
         }
 
-        .mobile-menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: var(--white);
-            transition: all 0.3s ease;
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1.2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.3s;
+        }
+        .stat-item:hover { border-color: var(--border-lit); }
+
+        .stat-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--pink);
+            box-shadow: 0 0 8px var(--pink);
+            flex-shrink: 0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.5; transform: scale(0.7); }
         }
 
-        @media (max-width: 768px) {
-            header {
-                padding: 1rem 5%;
-            }
-
-            nav {
-                display: none;
-                position: fixed;
-                top: 80px;
-                left: 0;
-                width: 100%;
-                background: var(--black);
-                flex-direction: column;
-                padding: 2rem;
-                border-bottom: 1px solid rgba(255, 103, 134, 0.2);
-            }
-
-            nav.active {
-                display: flex;
-            }
-
-            .mobile-menu-toggle {
-                display: flex;
-            }
-
-            .hero-content {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-                text-align: center;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-            }
-
-            .hero-text h1 {
-                font-size: 2.5rem;
-            }
-
-            .founders-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .step {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .step-number::after {
-                display: none;
-            }
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--muted-2);
+            font-family: 'DM Mono', monospace;
+            letter-spacing: 0.05em;
+        }
+        .stat-value {
+            margin-left: auto;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
         }
 
-        .animate-on-scroll {
+        /* ── CARD ────────────────────────────────────────────── */
+        .card-wrap {
+            grid-column: 2;
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
+            animation: riseUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards;
+        }
+        @keyframes riseUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        .animate-on-scroll.animated {
-            opacity: 1;
-            transform: translateY(0);
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 1px rgba(255,103,134,0.05),
+                0 40px 80px rgba(0,0,0,0.6),
+                0 0 60px rgba(255,103,134,0.06);
+            position: relative;
         }
+
+        /* glowing top edge */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--pink), transparent);
+            opacity: 0.6;
+        }
+
+        /* ── CARD HEADER ─────────────────────────────────────── */
+        .card-header {
+            padding: 2.5rem 2.5rem 2rem;
+            background: linear-gradient(135deg, var(--surface-2), var(--surface));
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .logo-mark {
+            width: 52px; height: 52px;
+            background: var(--pink);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 8px 24px var(--pink-glow);
+            position: relative;
+            overflow: hidden;
+        }
+        .logo-mark::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+        }
+        .logo-mark svg { position: relative; z-index: 1; }
+
+        .header-text {}
+        .header-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.7rem;
+            letter-spacing: 2px;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .header-sub {
+            font-size: 0.78rem;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            font-family: 'DM Mono', monospace;
+        }
+
+        /* ── FORM ────────────────────────────────────────────── */
+        .card-body {
+            padding: 2rem 2.5rem 2.5rem;
+        }
+
+        .field {
+            margin-bottom: 1.4rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted-2);
+            margin-bottom: 0.6rem;
+            font-family: 'DM Mono', monospace;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px; top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            transition: color 0.25s;
+            pointer-events: none;
+            display: flex; align-items: center;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.9rem 1rem 0.9rem 2.8rem;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+            -webkit-appearance: none;
+        }
+        input::placeholder { color: var(--muted); }
+
+        input:focus {
+            border-color: var(--pink);
+            background: rgba(255,103,134,0.04);
+            box-shadow: 0 0 0 3px rgba(255,103,134,0.12), 0 0 20px rgba(255,103,134,0.08);
+        }
+        input:focus + .input-icon,
+        .input-wrap:focus-within .input-icon { color: var(--pink); }
+
+        /* password toggle */
+        .toggle-pw {
+            position: absolute;
+            right: 14px; top: 50%;
+            transform: translateY(-50%);
+            background: none; border: none;
+            color: var(--muted); cursor: pointer;
+            display: flex; align-items: center;
+            padding: 2px;
+            transition: color 0.2s;
+        }
+        .toggle-pw:hover { color: var(--pink); }
+
+        /* remember row */
+        .row-between {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.8rem;
+            margin-top: 0.2rem;
+        }
+
+        .check-label {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--muted-2);
+            text-transform: none;
+            letter-spacing: 0;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 400;
+        }
+
+        input[type="checkbox"] {
+            appearance: none; -webkit-appearance: none;
+            width: 18px; height: 18px;
+            border: 1.5px solid var(--border);
+            border-radius: 5px;
+            background: var(--surface-2);
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        input[type="checkbox"]:checked {
+            background: var(--pink);
+            border-color: var(--pink);
+        }
+        input[type="checkbox"]:checked::after {
+            content: '';
+            position: absolute;
+            left: 5px; top: 2px;
+            width: 5px; height: 9px;
+            border: 2px solid white;
+            border-top: none; border-left: none;
+            transform: rotate(45deg);
+        }
+
+        /* ── SUBMIT ─────────────────────────────────────────── */
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--pink);
+            color: white;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.15rem;
+            letter-spacing: 3px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 30px rgba(255,103,134,0.35);
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent 60%);
+            transition: opacity 0.2s;
+        }
+
+        /* shimmer sweep */
+        .btn-submit::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn-submit:hover::after { left: 160%; }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 40px rgba(255,103,134,0.5);
+        }
+        .btn-submit:active { transform: translateY(0); }
+
+        .btn-inner {
+            position: relative; z-index: 1;
+            display: flex; align-items: center; justify-content: center;
+            gap: 0.6rem;
+        }
+
+        /* ── ERROR ALERTS ────────────────────────────────────── */
+        .alert-error {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.82rem;
+            color: #f87171;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ── FOOTER ─────────────────────────────────────────── */
+        .card-footer {
+            padding: 1.2rem 2.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+        }
+        .live-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 6px #22c55e;
+            animation: blink 2s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .footer-copy {
+            font-size: 0.7rem;
+            color: var(--muted);
+            font-family: 'DM Mono', monospace;
+        }
+
+        /* ── RIGHT PANEL (security notice) ──────────────────── */
+        .security-panel {
+            grid-column: 3;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            opacity: 0;
+            animation: slideLeft 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+        }
+        @keyframes slideLeft {
+            from { opacity: 0; transform: translateX(40px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        .security-title {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .security-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            padding: 1rem 1.2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.3s, transform 0.3s;
+            cursor: default;
+        }
+        .security-item:hover {
+            border-color: rgba(255,103,134,0.2);
+            transform: translateX(-4px);
+        }
+
+        .sec-icon {
+            width: 34px; height: 34px;
+            border-radius: 9px;
+            background: var(--pink-soft);
+            border: 1px solid rgba(255,103,134,0.15);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            color: var(--pink);
+        }
+
+        .sec-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 3px;
+        }
+        .sec-body {
+            font-size: 0.75rem;
+            color: var(--muted-2);
+            line-height: 1.5;
+        }
+
+        /* ── RESPONSIVE ─────────────────────────────────────── */
+        @media (max-width: 1100px) {
+            .brand-panel, .security-panel { display: none; }
+            .page { grid-template-columns: 1fr; justify-items: center; }
+            .card-wrap { grid-column: 1; width: 100%; max-width: 440px; }
+            body, html { overflow: auto; }
+        }
+
+        /* loading state */
+        .btn-submit.loading .btn-inner { opacity: 0; }
+        .btn-submit.loading::before {
+            background: none;
+        }
+        .spinner {
+            display: none;
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 22px; height: 22px;
+            border: 2.5px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+        }
+        .btn-submit.loading .spinner {
+            display: block;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div class="bg-pattern"></div>
 
-    <header>
-        <div class="logo">STUNIFY</div>
-        <nav id="nav">
-            <a href="#home">Home</a>
-            <a href="#features">Features</a>
-            <a href="#how-it-works">How It Works</a>
-            <a href="#privacy">Privacy</a>
-            <a href="#contact" class="cta-button">Get Started</a>
-        </nav>
-        <div class="mobile-menu-toggle" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
+<!-- BACKGROUND -->
+<div class="bg">
+    <div class="grid-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="scan-line"></div>
+</div>
+
+<div class="page">
+
+    <!-- LEFT — BRAND PANEL -->
+    <aside class="brand-panel">
+        <div class="brand-wordmark">
+            STU<span>NIFY</span>
         </div>
-    </header>
+        <p class="brand-tagline">Admin Management System</p>
 
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1>
-                    Share Smarter.
-                    <span>Live Better.</span>
-                </h1>
-                <p>
-                    The student-focused donation platform where useful items find new homes. 
-                    Moving accommodation? Don't bin it—share it with students who need it.
-                </p>
-                <div class="hero-buttons">
-                    <a href="#" class="btn-primary">Download App</a>
-                    <a href="#how-it-works" class="btn-secondary">Learn More</a>
+        <div class="brand-stats">
+            <div class="stat-item">
+                <div class="stat-dot"></div>
+                <span class="stat-label">Platform Status</span>
+                <span class="stat-value" style="color:#22c55e;">ONLINE</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-dot" style="animation-delay:-0.5s"></div>
+                <span class="stat-label">Active Users</span>
+                <span class="stat-value">—</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-dot" style="animation-delay:-1s"></div>
+                <span class="stat-label">Listed Items</span>
+                <span class="stat-value">—</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-dot" style="animation-delay:-1.5s"></div>
+                <span class="stat-label">Universities</span>
+                <span class="stat-value">—</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CENTRE — LOGIN CARD -->
+    <div class="card-wrap">
+        <div class="card">
+
+            <!-- Header -->
+            <div class="card-header">
+                <div class="logo-mark">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="header-text">
+                    <div class="header-title">Admin Portal</div>
+                    <div class="header-sub">Restricted Access · Stunify</div>
                 </div>
             </div>
-            <div class="hero-visual">
-                <div class="floating-card">
-                    <div class="stat-item">
-                        <div class="stat-number">5000</div>
-                        <div class="stat-label">Students Connected</div>
+
+            <!-- Form body -->
+            <div class="card-body">
+                <form method="POST" action="{{ route('admin.login') }}" id="loginForm">
+                    @csrf
+
+                    <!-- Email -->
+                    <div class="field">
+                        <label for="email">Email Address</label>
+                        <div class="input-wrap">
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                value="{{ old('email') }}"
+                                placeholder="admin@stunify.co.uk"
+                                required
+                                autofocus
+                                autocomplete="email"
+                            >
+                            <span class="input-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                            </span>
+                        </div>
+                        @error('email')
+                            <div class="alert-error">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number">12000</div>
-                        <div class="stat-label">Items Shared</div>
+
+                    <!-- Password -->
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <div class="input-wrap">
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                placeholder="Enter your password"
+                                required
+                                autocomplete="current-password"
+                            >
+                            <span class="input-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            </span>
+                            <button type="button" class="toggle-pw" id="togglePw" aria-label="Toggle password visibility" tabindex="-1">
+                                <svg id="eyeOpen" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                                <svg id="eyeClosed" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                                    <line x1="1" y1="1" x2="23" y2="23"/>
+                                </svg>
+                            </button>
+                        </div>
+                        @error('password')
+                            <div class="alert-error">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number">98</div>
-                        <div class="stat-label">User Satisfaction</div>
+
+                    <!-- Remember -->
+                    <div class="row-between">
+                        <label class="check-label" for="remember">
+                            <input type="checkbox" name="remember" id="remember">
+                            Remember this device
+                        </label>
                     </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <div class="spinner"></div>
+                        <span class="btn-inner">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                                <polyline points="10 17 15 12 10 7"/>
+                                <line x1="15" y1="12" x2="3" y2="12"/>
+                            </svg>
+                            Sign In to Dashboard
+                        </span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="card-footer">
+                <div class="footer-badge">
+                    <div class="live-dot"></div>
+                    Systems operational
                 </div>
+                <div class="footer-copy">© {{ now()->year ?? date('Y') }} Stunify</div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="founders">
-        <h2 class="section-title">Meet The Team</h2>
-        <p class="section-subtitle">Building a better sharing economy for students</p>
-        <div class="founders-grid">
-            <div class="founder-card animate-on-scroll">
-                <div class="founder-initial">UJ</div>
-                <div class="founder-name">Ujah Obinna John</div>
-                <div class="founder-role">Founder & CEO</div>
+    <!-- RIGHT — SECURITY NOTICES -->
+    <aside class="security-panel">
+        <div class="security-title">// Access Policy</div>
+
+        <div class="security-item">
+            <div class="sec-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
             </div>
-            <div class="founder-card animate-on-scroll">
-                <div class="founder-initial">HO</div>
-                <div class="founder-name">Harry Otuchere</div>
-                <div class="founder-role">Co-Founder</div>
-            </div>
-            <div class="founder-card animate-on-scroll">
-                <div class="founder-initial">DE</div>
-                <div class="founder-name">Damilare Ekundayo</div>
-                <div class="founder-role">Co-Founder</div>
-            </div>
-            <div class="founder-card animate-on-scroll">
-                <div class="founder-initial">AO</div>
-                <div class="founder-name">Alegbe Osuaemi</div>
-                <div class="founder-role">Co-Founder</div>
+            <div>
+                <div class="sec-title">Restricted Access</div>
+                <div class="sec-body">Authorised Stunify administrators only. Unauthorised access attempts are logged.</div>
             </div>
         </div>
-    </section>
 
-    <section class="features" id="features">
-        <h2 class="section-title">Why Choose Stunify?</h2>
-        <p class="section-subtitle">Built exclusively for students, by students</p>
-        <div class="features-grid">
-            <div class="feature-card animate-on-scroll">
-                <div class="feature-icon">🎓</div>
-                <div class="feature-title">Students Only</div>
-                <div class="feature-description">
-                    Verified student accounts (.ac.uk) can both donate and request items. 
-                    Creating a safe, trusted community for student sharing.
-                </div>
+        <div class="security-item">
+            <div class="sec-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
             </div>
-            <div class="feature-card animate-on-scroll">
-                <div class="feature-icon">♻️</div>
-                <div class="feature-title">Sustainable Living</div>
-                <div class="feature-description">
-                    Reduce waste by passing on items to students who need them. 
-                    Moving accommodation? Don't throw it away—share it.
-                </div>
-            </div>
-            <div class="feature-card animate-on-scroll">
-                <div class="feature-icon">💬</div>
-                <div class="feature-title">Easy Communication</div>
-                <div class="feature-description">
-                    In-app messaging makes coordination simple. Arrange pickups, 
-                    ask questions, and connect with other students seamlessly.
-                </div>
-            </div>
-            <div class="feature-card animate-on-scroll">
-                <div class="feature-icon">🔒</div>
-                <div class="feature-title">Privacy First</div>
-                <div class="feature-description">
-                    Your data is protected. We verify students without accessing 
-                    your inbox and never sell your personal information.
-                </div>
-            </div>
-            <div class="feature-card animate-on-scroll">
-                <div class="feature-icon">📍</div>
-                <div class="feature-title">Campus Focused</div>
-                <div class="feature-description">
-                    Find items near your campus. Optional location sharing helps 
-                    connect you with nearby students for easy collection.
-                </div>
-            </div>
-            <div class="feature-card animate-on-scroll">
-                <div class="feature-icon">💰</div>
-                <div class="feature-title">100% Free</div>
-                <div class="feature-description">
-                    No fees, no commissions, no hidden costs. Pure student-to-student 
-                    sharing focused on community, not profit.
-                </div>
+            <div>
+                <div class="sec-title">Encrypted Session</div>
+                <div class="sec-body">All admin sessions are encrypted and automatically expire after 8 hours of inactivity.</div>
             </div>
         </div>
-    </section>
 
-    <section class="how-it-works" id="how-it-works">
-        <h2 class="section-title">How It Works</h2>
-        <p class="section-subtitle">Getting started is simple</p>
-        <div class="steps">
-            <div class="step animate-on-scroll">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h3>Sign Up with Student Email</h3>
-                    <p>
-                        Register using your university email (.ac.uk). Verified students 
-                        unlock full access to donate, request, and receive items. 
-                        Non-students can still donate to support the community.
-                    </p>
-                </div>
+        <div class="security-item">
+            <div class="sec-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                </svg>
             </div>
-            <div class="step animate-on-scroll">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h3>Browse or List Items</h3>
-                    <p>
-                        Explore items shared by other students—from furniture to textbooks, 
-                        kitchenware to electronics. Have something to share? Create a listing 
-                        with photos and descriptions in minutes.
-                    </p>
-                </div>
-            </div>
-            <div class="step animate-on-scroll">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h3>Connect & Arrange</h3>
-                    <p>
-                        Use in-app messaging to coordinate pickup details. Meet safely on 
-                        campus in public locations during daylight hours. Build community 
-                        while reducing waste.
-                    </p>
-                </div>
-            </div>
-            <div class="step animate-on-scroll">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <h3>Share the Love</h3>
-                    <p>
-                        Complete the exchange and help build a sustainable student community. 
-                        Rate your experience and continue the cycle of sharing.
-                    </p>
-                </div>
+            <div>
+                <div class="sec-title">Activity Audit</div>
+                <div class="sec-body">Every action taken in this portal is recorded with a timestamp and IP address.</div>
             </div>
         </div>
-    </section>
 
-    <section class="privacy" id="privacy">
-        <h2 class="section-title">Your Privacy Matters</h2>
-        <div class="privacy-content">
-            <p style="text-align: center; opacity: 0.9; margin-bottom: 3rem; font-size: 1.1rem;">
-                We're committed to protecting your personal information and creating a safe space for student sharing.
-            </p>
-
-            <div class="privacy-highlight animate-on-scroll">
-                <h3>Student Verification Without Intrusion</h3>
-                <p>
-                    We verify your student status by checking your email domain (.ac.uk)—we never 
-                    read your emails or access your inbox. Your privacy is paramount.
-                </p>
+        <div class="security-item">
+            <div class="sec-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.38 2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.13 1 .36 1.93.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6 6l.97-.97a2 2 0 0 1 2.11-.45c.88.34 1.81.57 2.81.7a2 2 0 0 1 1.72 2.02z"/>
+                </svg>
             </div>
-
-            <div class="privacy-grid">
-                <div class="privacy-item animate-on-scroll">
-                    <h4>🛡️ Data Protection</h4>
-                    <p>
-                        We collect only essential information: account details, listings, and messages. 
-                        Everything is stored securely with encryption and access controls.
-                    </p>
-                </div>
-                <div class="privacy-item animate-on-scroll">
-                    <h4>🚫 No Selling Data</h4>
-                    <p>
-                        Your personal information is never sold or rented to third parties. 
-                        We're here to serve students, not advertisers.
-                    </p>
-                </div>
-                <div class="privacy-item animate-on-scroll">
-                    <h4>👁️ Visibility Control</h4>
-                    <p>
-                        You control what's shared. Profile info and listings are visible to facilitate 
-                        exchanges, but you decide what details to include.
-                    </p>
-                </div>
-                <div class="privacy-item animate-on-scroll">
-                    <h4>✅ Your Rights</h4>
-                    <p>
-                        Access, correct, or delete your data anytime. Request account deletion 
-                        easily through the app or by contacting support.
-                    </p>
-                </div>
-            </div>
-
-            <div class="privacy-highlight animate-on-scroll">
-                <h3>Safety First</h3>
-                <p>
-                    Meet in public campus locations during daylight. Don't share sensitive personal 
-                    information in messages. Report suspicious behavior immediately. We moderate 
-                    content and take swift action against policy violations.
-                </p>
-            </div>
-
-            <p style="text-align: center; margin-top: 3rem; opacity: 0.8;">
-                <a href="#" style="color: var(--primary-pink); text-decoration: none; font-weight: 700;">
-                    Read Full Privacy Policy →
-                </a>
-            </p>
-        </div>
-    </section>
-
-    <footer id="contact">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Stunify</h3>
-                <p style="opacity: 0.8; line-height: 1.7;">
-                    Building a sustainable sharing economy for students across the UK. 
-                    Share smarter, live better.
-                </p>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#privacy">Privacy</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Legal</h3>
-                <ul>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Community Guidelines</a></li>
-                    <li><a href="#">Safety Tips</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <ul>
-                    <li><a href="mailto:greatujah088@gmail.com">greatujah088@gmail.com</a></li>
-                    <li>United Kingdom</li>
-                    <li style="margin-top: 1rem;">
-                        <a href="#" style="display: inline-block; margin-right: 1rem;">Twitter</a>
-                        <a href="#" style="display: inline-block; margin-right: 1rem;">Instagram</a>
-                        <a href="#" style="display: inline-block;">LinkedIn</a>
-                    </li>
-                </ul>
+            <div>
+                <div class="sec-title">Need Access?</div>
+                <div class="sec-body">Contact the Stunify technical team at <span style="color:var(--pink); font-family:'DM Mono',monospace; font-size:0.72rem;">hello@stunify.co.uk</span></div>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Stunify. All rights reserved. Built with ❤️ for students.</p>
-        </div>
-    </footer>
+    </aside>
 
-    <script>
-        function toggleMenu() {
-            const nav = document.getElementById('nav');
-            nav.classList.toggle('active');
-        }
+</div>
 
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    document.getElementById('nav').classList.remove('active');
-                }
-            });
+<script>
+    // Password visibility toggle
+    const pwInput = document.getElementById('password');
+    const toggleBtn = document.getElementById('togglePw');
+    const eyeOpen = document.getElementById('eyeOpen');
+    const eyeClosed = document.getElementById('eyeClosed');
+
+    toggleBtn.addEventListener('click', () => {
+        const isHidden = pwInput.type === 'password';
+        pwInput.type = isHidden ? 'text' : 'password';
+        eyeOpen.style.display  = isHidden ? 'none'  : 'block';
+        eyeClosed.style.display = isHidden ? 'block' : 'none';
+    });
+
+    // Loading state on submit
+    const form = document.getElementById('loginForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', () => {
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
+    });
+
+    // Input — float label colours on fill
+    document.querySelectorAll('input[type="email"], input[type="password"]').forEach(input => {
+        input.addEventListener('input', () => {
+            input.style.borderColor = input.value.length > 0
+                ? 'rgba(255,103,134,0.3)'
+                : '';
         });
-
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
-            observer.observe(el);
-        });
-
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            const currentScroll = window.pageYOffset;
-
-            if (currentScroll > 100) {
-                header.style.background = 'rgba(10, 10, 10, 0.95)';
-                header.style.boxShadow = '0 5px 20px rgba(255, 103, 134, 0.1)';
-            } else {
-                header.style.background = 'rgba(10, 10, 10, 0.8)';
-                header.style.boxShadow = 'none';
-            }
-        });
-
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero-visual');
-            if (hero) {
-                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
-            }
-        });
-
-        function animateCounter(element, target) {
-            let current = 0;
-            const increment = target / 100;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    element.textContent = target + '+';
-                    clearInterval(timer);
-                } else {
-                    element.textContent = Math.floor(current) + '+';
-                }
-            }, 20);
-        }
-
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
-                    const numbers = entry.target.querySelectorAll('.stat-number');
-                    numbers.forEach(num => {
-                        const target = parseInt(num.textContent);
-                        animateCounter(num, target);
-                    });
-                    entry.target.classList.add('counted');
-                }
-            });
-        }, { threshold: 0.5 });
-
-        const floatingCard = document.querySelector('.floating-card');
-        if (floatingCard) {
-            statsObserver.observe(floatingCard);
-        }
-    </script>
+    });
+</script>
 </body>
 </html>
